@@ -1,26 +1,23 @@
 <template>
   <div class="container">
     <Header @toggle-add-task="toggleAddTask" title='Task Tracker' :showAddTask="showAddTask"/>
-    <div v-show="showAddTask">
-      <AddTask @add-task="addTask" />
-    </div>
-    <Tasks @delete-task="deleteTask" @toggle-reminder="toggleReminder" :tassks='tasks' />
+    
+    <router-view :showAddTask="showAddTask"></router-view>
+
+    <Footer />
   </div>
 </template>
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component';
 import Header from './components/Header.vue';
-import Tasks from './components/Tasks.vue';
-import AddTask from './components/AddTask.vue';
-
+import Footer from './components/Footer.vue';
 
 
 @Options({
   components: {
     Header,
-    Tasks,
-    AddTask,
+    Footer,
   },
   data(){
     return {
@@ -31,48 +28,8 @@ import AddTask from './components/AddTask.vue';
   methods: {
     toggleAddTask(){
       this.showAddTask = !this.showAddTask
-    },
-    addTask(task: any){
-      this.tasks = [...this.tasks, task]
-    },
-    deleteTask(id: any){
-      if(confirm('Are you sure?')){
-        this.tasks = this.tasks.filter((task: any)=>task.id !== id)
-      }
-    },
-    toggleReminder(id: any){
-      this.tasks = this.tasks.map((task: any)=>{
-        if(task.id === id){
-         return {...task, reminder: !task.reminder}
-        }else{
-          return task
-        }
-        // task.id ===id ? {... task, reminder: !task.reminder}:task
-      })
     }
   },
-  created(){
-    this.tasks = [
-      {
-        id:1,
-        text: 'Doctors Appointment',
-        day: 'March 1st at 2:30pm',
-        reminder: true,
-      },
-      {
-        id: 2,
-        text: 'Meeting at School',
-        day: 'March 3rd at 1:30pm',
-        reminder: true,
-      },
-      {
-        id: 3,
-        text: 'Food Shopping',
-        day: 'March 3rd at 11:00am',
-        reminder: false
-      }
-    ]
-  }
 })
 export default class App extends Vue {}
 </script>
